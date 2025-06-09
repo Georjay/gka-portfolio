@@ -447,7 +447,7 @@ const Footer = () => {
   return (
     <footer className="bg-gray-950 text-gray-400 py-8 text-center border-t border-gray-800">
       <div className="container mx-auto px-4">
-        <p className="text-sm">&copy; {new Date().getFullYear()} George Kofi Addai. All rights reserved.</p>
+        <p className="text-sm">&copy; {new Date().getFullYear()} George Addai. All rights reserved.</p>
         <p className="text-xs mt-2">Designed and Developed with Passion.</p>
       </div>
     </footer>
