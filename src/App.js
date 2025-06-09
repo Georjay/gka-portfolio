@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import georgeKofiAddaiPhoto from './assets/images/gka-1.png';
 
 // Reusable Button Component (Styling adjusted for dark mode, sleek)
 const Button = ({ children, onClick, primary = false, className = '' }) => {
@@ -130,10 +131,15 @@ const HeroSection = () => {
           </div>
         </div>
         <div className="flex-shrink-0 relative w-full md:w-1/2 mt-8 md:mt-0 flex justify-center md:justify-end"> {/* Image container */}
-          <img
+          {/* <img
             src="https://placehold.co/500x700/000000/FFFFFF/png?text=Your+Professional+Photo+Transparent+BG" // Placeholder for transparent background image
             alt="George"
             className="w-auto h-72 sm:h-96 md:h-[600px] lg:h-[700px] object-contain animate-fade-in-right" // Adjusted sizing and object-contain
+          /> */}
+          <img
+            src={georgeKofiAddaiPhoto} // This is the change!
+            alt="George"
+            className="w-auto h-72 sm:h-96 md:h-[600px] lg:h-[700px] object-contain animate-fade-in-right"
           />
         </div>
       </div>
