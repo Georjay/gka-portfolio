@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // Reusable Button Component (Styling adjusted for dark mode, sleek)
 const Button = ({ children, onClick, primary = false, className = '' }) => {
@@ -35,22 +35,60 @@ const LinkIcon = ({ className = '' }) => (
   </svg>
 );
 
-// Navigation Bar (Sleek dark mode)
+// Hamburger Icon (for mobile menu toggle)
+const HamburgerIcon = ({ isOpen, onClick }) => (
+  <button
+    className="text-white focus:outline-none md:hidden"
+    onClick={onClick}
+    aria-label="Toggle navigation menu"
+  >
+    {isOpen ? (
+      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    ) : (
+      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    )}
+  </button>
+);
+
+
+// Navigation Bar (Sleek dark mode with responsiveness and fluid dropdown)
 const Navbar = () => {
-  const scrollToSection = (id) => {
+  const [isOpen, setIsOpen] = useState(false); // State to manage mobile menu open/close
+
+  const handleNavLinkClick = (id) => {
     document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    setIsOpen(false); // Close menu after clicking a link
   };
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-gray-950 bg-opacity-80 backdrop-blur-md shadow-lg z-50 py-4">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="text-xl font-bold text-white tracking-wide">George Kofi Addai</div>
-        <ul className="flex space-x-6">
-          <li><button onClick={() => scrollToSection('home')} className="text-gray-300 hover:text-white font-medium transition-colors duration-200">Home</button></li>
-          <li><button onClick={() => scrollToSection('about')} className="text-gray-300 hover:text-white font-medium transition-colors duration-200">About</button></li>
-          <li><button onClick={() => scrollToSection('projects')} className="text-gray-300 hover:text-white font-medium transition-colors duration-200">Projects</button></li>
-          <li><button onClick={() => scrollToSection('blog')} className="text-gray-300 hover:text-white font-medium transition-colors duration-200">Blog</button></li>
-          <li><button onClick={() => scrollToSection('contact')} className="text-gray-300 hover:text-white font-medium">Contact</button></li>
+        <HamburgerIcon isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} /> {/* Hamburger icon for mobile */}
+
+        {/* Desktop Navigation Links */}
+        <ul className="hidden md:flex space-x-6">
+          <li><button onClick={() => handleNavLinkClick('home')} className="text-gray-300 hover:text-white font-medium transition-colors duration-200">Home</button></li>
+          <li><button onClick={() => handleNavLinkClick('about')} className="text-gray-300 hover:text-white font-medium transition-colors duration-200">About</button></li>
+          <li><button onClick={() => handleNavLinkClick('projects')} className="text-gray-300 hover:text-white font-medium transition-colors duration-200">Projects</button></li>
+          <li><button onClick={() => handleNavLinkClick('blog')} className="text-gray-300 hover:text-white font-medium transition-colors duration-200">Blog</button></li>
+          <li><button onClick={() => handleNavLinkClick('contact')} className="text-gray-300 hover:text-white font-medium">Contact</button></li>
+        </ul>
+      </div>
+
+      {/* Mobile Menu (Conditional Rendering with Transition) */}
+      {/* Added `duration-500` for slower transition, `ease-in-out` for smoothness */}
+      <div className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}>
+        <ul className="flex flex-col space-y-2 mt-4 px-4 pb-4 border-t border-gray-800">
+          <li><button onClick={() => handleNavLinkClick('home')} className="block text-gray-300 hover:text-white font-medium w-full text-left py-2">Home</button></li>
+          <li><button onClick={() => handleNavLinkClick('about')} className="block text-gray-300 hover:text-white font-medium w-full text-left py-2">About</button></li>
+          <li><button onClick={() => handleNavLinkClick('projects')} className="block text-gray-300 hover:text-white font-medium w-full text-left py-2">Projects</button></li>
+          <li><button onClick={() => handleNavLinkClick('blog')} className="block text-gray-300 hover:text-white font-medium w-full text-left py-2">Blog</button></li>
+          <li><button onClick={() => handleNavLinkClick('contact')} className="block text-gray-300 hover:text-white font-medium w-full text-left py-2">Contact</button></li>
         </ul>
       </div>
     </nav>
@@ -63,6 +101,7 @@ const HeroSection = () => {
     document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
   };
   const handleReadBlog = () => {
+    // FIX: Corrected typo from scrollIn`toView to scrollIntoView
     document.getElementById('blog').scrollIntoView({ behavior: 'smooth' });
   };
   const handleContactMe = () => {
@@ -123,7 +162,10 @@ const AboutMe = () => {
           <div className="p-6 bg-gray-900 rounded-xl shadow-xl border border-gray-800">
             <h3 className="text-2xl font-semibold mb-6 text-blue-400">My Journey</h3>
             <p className="mb-4 leading-relaxed text-gray-300">
-              I'm passionate about coding; it's where I bring ideas to life and create impactful solutions. My drive for continuous learning ensures I'm always evolving to deliver cutting-edge results.
+              My path through IT Support, Community Resources, and Academic Operations has built a unique skill set. I excel at problem-solving, process optimization, and clear communication.
+            </p>
+            <p className="leading-relaxed text-gray-300">
+              Each role strengthened my ability to streamline processes and bridge technical gaps, preparing me to tackle complex challenges with efficient, technology-driven solutions.
             </p>
           </div>
 
@@ -308,13 +350,9 @@ const Blog = () => {
 
 // Contact Section (Dark mode, sleek form)
 const Contact = () => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // In a real application, this would send data to a backend.
-    // For GitHub Pages, consider services like Formspree.io or Netlify Forms.
-    alert("Thank you for your message! This is a placeholder for a functional contact form.");
-    e.target.reset(); // Clear the form
-  };
+  // Replace with your actual Formspree endpoint (e.g., https://formspree.io/f/your_form_id)
+  // You get this ID after creating a new form on Formspree.io
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/mzzgegzz";
 
   return (
     <section id="contact" className="py-20 bg-gray-900 text-gray-200 px-4 md:px-0">
@@ -322,16 +360,16 @@ const Contact = () => {
         <h2 className="text-4xl font-bold text-center mb-16 text-white">Get In Touch</h2>
         <div className="bg-gray-950 rounded-xl shadow-2xl p-8 md:p-12 border border-gray-800">
           <p className="text-center text-lg text-gray-300 mb-10">
-            Open to projects, ideas, or opportunities. Let's connect.
+            Open to projects, ideas, or opportunities. Let's connect. Fill out the form below.
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form action={FORMSPREE_ENDPOINT} method="POST" className="space-y-6">
             <div>
               <label htmlFor="name" className="block text-gray-200 font-semibold mb-2">Name</label>
               <input
                 type="text"
                 id="name"
-                name="name"
+                name="name" // IMPORTANT: Formspree uses the `name` attribute
                 className="w-full px-4 py-3 rounded-lg border border-gray-700 bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
                 placeholder="Your Name"
                 required
@@ -342,7 +380,7 @@ const Contact = () => {
               <input
                 type="email"
                 id="email"
-                name="email"
+                name="email" // IMPORTANT: Formspree uses the `name` attribute
                 className="w-full px-4 py-3 rounded-lg border border-gray-700 bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
                 placeholder="your.email@example.com"
                 required
@@ -353,7 +391,7 @@ const Contact = () => {
               <input
                 type="text"
                 id="subject"
-                name="subject"
+                name="subject" // IMPORTANT: Formspree uses the `name` attribute
                 className="w-full px-4 py-3 rounded-lg border border-gray-700 bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
                 placeholder="Subject of your message"
                 required
@@ -363,13 +401,14 @@ const Contact = () => {
               <label htmlFor="message" className="block text-gray-200 font-semibold mb-2">Message</label>
               <textarea
                 id="message"
-                name="message"
+                name="message" // IMPORTANT: Formspree uses the `name` attribute
                 rows="5"
                 className="w-full px-4 py-3 rounded-lg border border-gray-700 bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
                 placeholder="Your message..."
                 required
               ></textarea>
             </div>
+            {/* Formspree will handle the submission, so no `onSubmit` handler is needed here */}
             <div className="text-center">
               <Button primary type="submit" className="w-full sm:w-auto mt-4">Send Message</Button>
             </div>
